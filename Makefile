@@ -17,10 +17,19 @@ test: $(ALL_GUESTS)
 %.syntax-check: templates/%.yaml
 	oc process --local -f "templates/$*.yaml" NAME=the-$* PVCNAME=the-$*-pvc
 
-%.apply-and-remove:
-	oc process --local -f "templates/$*.yaml" NAME=the-$* PVCNAME=the-$*-pvc | \
+%.apply-and-remove: templates/%.yaml
+	oc process --local -f "templates/$*.yaml" NAME=$*-aar PVCNAME=the-$*-pvc-aar | \
 	  kubectl apply -f -
-	oc process --local -f "templates/$*.yaml" NAME=the-$* PVCNAME=the-$*-pvc | \
+	oc process --local -f "templates/$*.yaml" NAME=$*-aar PVCNAME=the-$*-pvc-aar | \
+	  kubectl delete -f -
+
+%.start-and-stop: %.pvc
+	oc process --local -f "templates/$*.yaml" NAME=$*-sas PVCNAME=$* | \
+	  kubectl apply -f -
+	virtctl start $*-sas
+	# Wait for a pretty universal magic word
+	virtctl console --timeout=5 $*-sas | grep -m 1 "Welcome"
+	oc process --local -f "templates/$*.yaml" NAME=$*-sas PVCNAME=$* | \
 	  kubectl delete -f -
 
 %.generated-name-apply-and-remove:

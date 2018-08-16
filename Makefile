@@ -1,43 +1,57 @@
 
+# i.e. fedora28.yaml
 ALL_TEMPLATES=$(wildcard templates/*.yaml)
-
+# i.e. fedora28
 ALL_GUESTS=$(ALL_TEMPLATES:templates/%.yaml=%)
 
-$(ALL_GUESTS): %: %.syntax-check
-$(ALL_GUESTS): %: %.apply-and-remove
-$(ALL_GUESTS): %: %.generated-name-apply-and-remove
 
-ifeq ($(WITH_FUNCTIONAL),y)
-TESTABLE_GUESTS=fedora28 ubuntu1604 opensuse15
-$(TESTABLE_GUESTS): %: %.start-and-stop
+TEST_UNIT=$(ALL_GUESTS)
+ifeq ($(TEST_FUNCTIONAL),ALL)
+TEST_FUNCTIONAL=fedora28 ubuntu1604
+#opensuse15 centos7
 endif
 
-test: $(ALL_GUESTS)
+
+unit-tests: is-deployed $(TEST_UNIT)
+$(TEST_UNIT): %: %.syntax-check
+$(TEST_UNIT): %: %.apply-and-remove
+$(TEST_UNIT): %: %.generated-name-apply-and-remove
+
+
+functional-tests: is-deployed $(TEST_FUNCTIONAL)
+$(TEST_FUNCTIONAL): %: %.start-and-stop
+
+
+test: unit-tests functional-tests
+
+
+is-deployed:
+	kubectl api-versions | grep kubevirt.io
 
 %.syntax-check: templates/%.yaml
-	oc process --local -f "templates/$*.yaml" NAME=the-$* PVCNAME=the-$*-pvc
+	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$@-pvc
 
 %.apply-and-remove: templates/%.yaml
-	oc process --local -f "templates/$*.yaml" NAME=$*-aar PVCNAME=the-$*-pvc-aar | \
+	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$@-pvc | \
 	  kubectl apply -f -
-	oc process --local -f "templates/$*.yaml" NAME=$*-aar PVCNAME=the-$*-pvc-aar | \
+	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$@-pvc | \
 	  kubectl delete -f -
 
 %.start-and-stop: %.pvc
-	oc process --local -f "templates/$*.yaml" NAME=$*-sas PVCNAME=$* | \
+	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$* | \
 	  kubectl apply -f -
-	virtctl start $*-sas
+	virtctl start $@
 	sleep 2
 	# Wait for a pretty universal magic word
-	virtctl console --timeout=5 $*-sas | egrep -m 1 "Welcome|systemd"
-	oc process --local -f "templates/$*.yaml" NAME=$*-sas PVCNAME=$* | \
+	virtctl console --timeout=5 $@ | egrep -m 1 "Welcome|systemd"
+	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$* | \
 	  kubectl delete -f -
 
 %.generated-name-apply-and-remove:
-	oc process --local -f "templates/$*.yaml" PVCNAME=the-$*-pvc > $*.yaml
-	kubectl apply -f $*.yaml
-	kubectl delete -f $*.yaml
-	rm -v $*.yaml
+	oc process --local -f "templates/$*.yaml" PVCNAME=$@-pvc > $@.yaml
+	kubectl apply -f $@.yaml
+	kubectl delete -f $@.yaml
+	rm -v $@.yaml
 
 %.pvc:
 	# This is just testing, not creating, we separate creation
@@ -61,7 +75,7 @@ ubuntu1604.raw: ubuntu1604.qcow2
 	qemu-img convert -p -O raw $< $@
 
 opensuse15.qcow2:
-	curl -L -o $@ https://download.opensuse.org/repositories/Cloud:/Images:/Leap_15.0/images/openSUSE-Leap-15.0-OpenStack.x86_64-0.0.4-Buildlp150.12.11.qcow2
+	curl -L -o $@ https://download.opensuse.org/repositories/Cloud:/Images:/Leap_15.0/images/openSUSE-Leap-15.0-OpenStack.x86_64-0.0.4-Buildlp150.12.12.qcow2
 opensuse15.raw: opensuse15.qcow2
 	qemu-img convert -p -O raw $< $@
 

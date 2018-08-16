@@ -8,8 +8,12 @@ env:
     - CHANGE_MINIKUBE_NONE_USER=true
     - KUBEVIRT_VER=v0.8.0-alpha.0
     - MINIKUBE_VER=v0.25.2
-  matrix:
     - K8S_VER=1.10.0
+  matrix:
+    - WITH_FUNCTIONAL=n
+    - WITH_FUNCTIONAL=y TESTABLE_GUESTS=fedora28
+    - WITH_FUNCTIONAL=y TESTABLE_GUESTS=rhel75
+    - WITH_FUNCTIONAL=y TESTABLE_GUESTS=ubuntu1604
 
 #notifications:
 #  irc:
@@ -46,8 +50,9 @@ before_script:
 - kubectl api-versions | grep kubevirt.io
 - while [[ "$(kubectl get pods --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get pods --all-namespaces ; sleep 6; done
 
-# Create PVs for functional tests
-- make pvs
+# If needed, create the PV for functional tests
+- sh -c "[[ -n '$WITH_FUNCTIONAL' ]] && make $TESTABLE_GUESTS.pv"
 
 script:
-- make test
+# -e is important to let make use the vars defined in "matrix:" above
+- make -e test

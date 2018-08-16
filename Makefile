@@ -7,7 +7,7 @@ $(ALL_GUESTS): %: %.syntax-check
 $(ALL_GUESTS): %: %.apply-and-remove
 $(ALL_GUESTS): %: %.generated-name-apply-and-remove
 
-ifdef WITH_FUNCTIONAL
+ifeq ($(WITH_FUNCTIONAL),y)
 TESTABLE_GUESTS=fedora28 ubuntu1604 opensuse15
 $(TESTABLE_GUESTS): %: %.start-and-stop
 endif

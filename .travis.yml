@@ -51,7 +51,7 @@ before_script:
 - while [[ "$(kubectl get pods --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get pods --all-namespaces ; sleep 6; done
 
 # If needed, create the PV for functional tests
-- sh -c "[[ -n '$WITH_FUNCTIONAL' ]] && make $TESTABLE_GUESTS.pv"
+- bash -c "[[ -n '$WITH_FUNCTIONAL' ]] && make $TESTABLE_GUESTS.pv"
 
 script:
 # -e is important to let make use the vars defined in "matrix:" above

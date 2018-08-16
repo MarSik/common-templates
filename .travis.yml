@@ -10,11 +10,11 @@ env:
     - MINIKUBE_VER=v0.25.2
     - K8S_VER=1.10.0
   matrix:
-    - WITH_FUNCTIONAL=n
-    - WITH_FUNCTIONAL=y TESTABLE_GUESTS=fedora28
-    - WITH_FUNCTIONAL=y TESTABLE_GUESTS=ubuntu1604
-#    - WITH_FUNCTIONAL=y TESTABLE_GUESTS=opensuse15
-#    - WITH_FUNCTIONAL=y TESTABLE_GUESTS=rhel75
+    - TEST_FUNCTIONAL=
+    - TEST_FUNCTIONAL=fedora28
+    - TEST_FUNCTIONAL=ubuntu1604
+#    - TEST_FUNCTIONAL=opensuse15
+#    - TEST_FUNCTIONAL=rhel75
 
 #notifications:
 #  irc:

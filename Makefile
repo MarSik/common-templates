@@ -39,7 +39,6 @@ is-deployed:
 	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$* | \
 	  kubectl apply -f -
 	virtctl start $@
-	sleep 6
 	while [[ "$(kubectl get vmi --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get vmi --all-namespaces ; sleep 6; done
 	# Wait for a pretty universal magic word
 	virtctl console --timeout=5 $@ | egrep -m 1 "Welcome|systemd"

@@ -7,8 +7,7 @@ ALL_GUESTS=$(ALL_TEMPLATES:templates/%.yaml=%)
 
 TEST_UNIT=$(ALL_GUESTS)
 ifeq ($(TEST_FUNCTIONAL),ALL)
-TEST_FUNCTIONAL=fedora28 ubuntu1604
-#opensuse15 centos7
+TEST_FUNCTIONAL=fedora28 ubuntu1604 opensuse15 centos7
 endif
 
 
@@ -57,7 +56,7 @@ is-deployed:
 	# This is just testing, not creating, we separate creation
 	kubectl get pvc $*
 
-pvs: $(TESTABLE_GUESTS:%=%.pvs)
+pvs: $(TESTABLE_GUESTS:%=%.pv)
 raws: $(TESTABLE_GUESTS:%=%.raw)
 
 %.pv: %.raw

@@ -51,8 +51,7 @@ is-deployed:
 	kubectl delete -f $@.yaml
 	rm -v $@.yaml
 
-%.pvc:
-	# This is just testing, not creating, we separate creation
+%.pvc: %.pv
 	kubectl get pvc $*
 
 pvs: $(TESTABLE_GUESTS:%=%.pv)

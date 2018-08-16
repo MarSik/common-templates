@@ -13,17 +13,17 @@ env:
 matrix:
   include:
   - name: Syntax checks on all templates
-    env: TEST_UNIT=y
+    env: TARGET=unit-tests
   - name: Disk image checks
-    env: TEST_DISKS="fedora28.raw ubuntu1604.raw opensuse15.raw rhel75.raw"
+    env: TARGET="fedora28.raw ubuntu1604.raw opensuse15.raw rhel75.raw"
   - name: Fedora functional test
-    env: TEST_FUNCTIONAL=fedora28
+    env: TARGET=functional-tests TEST_FUNCTIONAL=fedora28
   - name: Ubuntu functional test
-    env: TEST_FUNCTIONAL=ubuntu1604
+    env: TARGET=functional-tests TEST_FUNCTIONAL=ubuntu1604
   - name: OpenSUSE functional test
-    env: TEST_FUNCTIONAL=opensuse15
+    env: TARGET=functional-tests TEST_FUNCTIONAL=opensuse15
   - name: RHEL/CentOS functional test
-    env: TEST_FUNCTIONAL=rhel75
+    env: TARGET=functional-tests TEST_FUNCTIONAL=rhel75
 
 #notifications:
 #  irc:
@@ -61,8 +61,5 @@ before_script:
 - while [[ "$(kubectl get pods --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get pods --all-namespaces ; sleep 6; done
 
 script:
-# If needed, create the PV for functional tests
-- bash -c "[[ -n '$TEST_FUNCTIONAL' ]] && make $TEST_FUNCTIONAL.pv-minikube || true"
-- bash -c "[[ -n '$TEST_DISKS' ]] && make $TEST_DISKS || true"
 # -e is important to let make use the vars defined in "matrix:" above
-- bash -c "[[ -n '$TEST_UNIT' ]] && make -e test || true"
+- make -e $TARGET

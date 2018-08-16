@@ -43,7 +43,7 @@ test: $(ALL_GUESTS)
 	# This is just testing, not creating, we separate creation
 	kubectl get pvc $*
 
-pvs: raws
+pvs: $(TESTABLE_GUESTS:%=%.pvs)
 raws: $(TESTABLE_GUESTS:%=%.raw)
 
 %.pv: %.raw

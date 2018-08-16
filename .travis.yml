@@ -7,7 +7,7 @@ env:
   global:
     - CHANGE_MINIKUBE_NONE_USER=true
     - KUBEVIRT_VER=v0.8.0-alpha.0
-    - MINIKUBE_VER=v0.28.2
+    - MINIKUBE_VER=v0.25.2
   matrix:
     - K8S_VER=1.10.0
 

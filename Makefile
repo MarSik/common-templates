@@ -20,7 +20,6 @@ $(TEST_UNIT): %: %.generated-name-apply-and-remove
 functional-tests: is-deployed $(TEST_FUNCTIONAL)
 $(TEST_FUNCTIONAL): %: %.start-and-stop
 
-
 test: unit-tests functional-tests
 
 

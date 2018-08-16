@@ -13,7 +13,7 @@ env:
 matrix:
   include:
   - name: Syntax checks
-    env: TEST_FUNCTIONAL=
+    env: TEST_UNIT=y
   - name: Disk image checks
     env: TEST_DISKS="fedora28.raw ubuntu1604.raw opensuse15.raw rhel75.raw"
   - name: Fedora functional test
@@ -65,4 +65,4 @@ script:
 - bash -c "[[ -n '$TEST_FUNCTIONAL' ]] && make $TEST_FUNCTIONAL.pv || true"
 - bash -c "[[ -n '$TEST_DISKS' ]] && make $TEST_DISKS || true"
 # -e is important to let make use the vars defined in "matrix:" above
-- make -e test
+- bash -c "[[ -n '$TEST_UNIT' ]] && make -e test || true"

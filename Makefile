@@ -27,8 +27,9 @@ test: $(ALL_GUESTS)
 	oc process --local -f "templates/$*.yaml" NAME=$*-sas PVCNAME=$* | \
 	  kubectl apply -f -
 	virtctl start $*-sas
+	sleep 2
 	# Wait for a pretty universal magic word
-	virtctl console --timeout=5 $*-sas | grep -m 1 "Welcome"
+	virtctl console --timeout=5 $*-sas | egrep -m 1 "Welcome|systemd"
 	oc process --local -f "templates/$*.yaml" NAME=$*-sas PVCNAME=$* | \
 	  kubectl delete -f -
 

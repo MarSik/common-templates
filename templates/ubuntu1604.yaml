@@ -31,6 +31,7 @@ objects:
         kubevirt.io/os: ubuntu1604
     domain:
       cpu:
+        model: Conroe
         cores: 2
       devices: {}
       resources:

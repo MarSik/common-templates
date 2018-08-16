@@ -47,7 +47,7 @@ before_script:
 - curl -L https://github.com/fabiand/kubectl-plugin-pvc/raw/master/install.sh | bash
 
 # Start Kubernetes using minikube
-- sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER --bootstrapper=localkube --mount
+- sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER --bootstrapper=localkube --mount --mount-string $PWD:/minikube-host
 - minikube update-context
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
@@ -62,7 +62,7 @@ before_script:
 
 script:
 # If needed, create the PV for functional tests
-- bash -c "[[ -n '$TEST_FUNCTIONAL' ]] && make $TEST_FUNCTIONAL.pv || true"
+- bash -c "[[ -n '$TEST_FUNCTIONAL' ]] && make $TEST_FUNCTIONAL.pv-minikube || true"
 - bash -c "[[ -n '$TEST_DISKS' ]] && make $TEST_DISKS || true"
 # -e is important to let make use the vars defined in "matrix:" above
 - bash -c "[[ -n '$TEST_UNIT' ]] && make -e test || true"

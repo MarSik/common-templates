@@ -10,9 +10,13 @@ env:
     - MINIKUBE_VER=v0.25.2
     - K8S_VER=1.10.0
   matrix:
-    - TEST_FUNCTIONAL=
-    - TEST_FUNCTIONAL=fedora28
-    - TEST_FUNCTIONAL=ubuntu1604
+    include:
+    - name: Syntax checks
+      env: TEST_FUNCTIONAL=
+    - name: Fedora functional test
+      env: TEST_FUNCTIONAL=fedora28
+    - name: Ubuntu functional test
+      env: TEST_FUNCTIONAL=ubuntu1604
 #    - TEST_FUNCTIONAL=opensuse15
 #    - TEST_FUNCTIONAL=rhel75
 

@@ -12,7 +12,7 @@ env:
 
 matrix:
   include:
-  - name: Syntax checks
+  - name: Syntax checks on all templates
     env: TEST_UNIT=y
   - name: Disk image checks
     env: TEST_DISKS="fedora28.raw ubuntu1604.raw opensuse15.raw rhel75.raw"

@@ -51,7 +51,7 @@ before_script:
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
 # FIXME Workaround for https://github.com/kubernetes/kubernetes/issues/61058
-- sudo mount --make-rshared /run
+- sudo mount --make-rshared /
 
 # Deploy KubeVirt
 - kubectl create configmap -n kube-system kubevirt-config --from-literal debug.useEmulation=true || true

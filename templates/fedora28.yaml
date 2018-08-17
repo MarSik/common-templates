@@ -35,7 +35,7 @@ objects:
       devices: {}
       resources:
         requests:
-          memory: 1G
+          memory: 2G
 - apiVersion: kubevirt.io/v1alpha2
   kind: VirtualMachine
   metadata:

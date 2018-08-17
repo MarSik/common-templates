@@ -12,13 +12,13 @@ endif
 
 
 unit-tests: is-deployed $(TEST_UNIT)
-$(TEST_UNIT): %: %.syntax-check
-$(TEST_UNIT): %: %.apply-and-remove
-$(TEST_UNIT): %: %.generated-name-apply-and-remove
+$(TEST_UNIT): %: %-syntax-check
+$(TEST_UNIT): %: %-apply-and-remove
+$(TEST_UNIT): %: %-generated-name-apply-and-remove
 
 
 functional-tests: is-deployed $(TEST_FUNCTIONAL)
-$(TEST_FUNCTIONAL): %: %.start-and-stop
+$(TEST_FUNCTIONAL): %: %-start-and-stop
 
 test: unit-tests functional-tests
 
@@ -26,22 +26,22 @@ test: unit-tests functional-tests
 is-deployed:
 	kubectl api-versions | grep kubevirt.io
 
-%.syntax-check: templates/%.yaml
+%-syntax-check: templates/%.yaml
 	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$@-pvc
 
-%.apply-and-remove: templates/%.yaml
+%-apply-and-remove: templates/%.yaml
 	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$@-pvc | \
 	  kubectl apply -f -
 	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$@-pvc | \
 	  kubectl delete -f -
 
-%.generated-name-apply-and-remove:
+%-generated-name-apply-and-remove:
 	oc process --local -f "templates/$*.yaml" PVCNAME=$@-pvc > $@.yaml
 	kubectl apply -f $@.yaml
 	kubectl delete -f $@.yaml
 	rm -v $@.yaml
 
-%.start-and-stop: %.pvc
+%-start-and-stop: %.pvc
 	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$* | \
 	  kubectl apply -f -
 	virtctl start $@

@@ -35,28 +35,32 @@ is-deployed:
 	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$@-pvc | \
 	  kubectl delete -f -
 
-%.start-and-stop: %.pvc
-	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$* | \
-	  kubectl apply -f -
-	virtctl start $@
-	while [ "$$(kubectl get vmi --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]; do kubectl get vmi --all-namespaces ; sleep 6; done
-	# Wait for a pretty universal magic word
-	virtctl console --timeout=5 $@ | egrep -m 1 "Welcome|systemd"
-	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$* | \
-	  kubectl delete -f -
-
 %.generated-name-apply-and-remove:
 	oc process --local -f "templates/$*.yaml" PVCNAME=$@-pvc > $@.yaml
 	kubectl apply -f $@.yaml
 	kubectl delete -f $@.yaml
 	rm -v $@.yaml
 
-%.pvc: %.pv
-	kubectl get pvc $*
+%.start-and-stop: %.pvc
+	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$* | \
+	  kubectl apply -f -
+	virtctl start $@
+	while ! kubectl get vmi $@ -o yaml | grep "phase: Running" ; do kubectl get vmi -o yaml $@ | grep phase -C4 ; sleep 6; done
+	# Wait for a pretty universal magic word
+	virtctl console --timeout=5 $@ | egrep -m 1 "Welcome|systemd"
+	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$* | \
+	  kubectl delete -f -
 
 pvs: $(TESTABLE_GUESTS:%=%.pv)
 raws: $(TESTABLE_GUESTS:%=%.raw)
 
+ifdef CI
+%.pvc: %.pv
+	kubectl get pvc $*
+else
+%.pvc:
+	kubectl get pvc $*
+endif
 
 ifdef TRAVIS
 %.pv: %.raw

@@ -60,7 +60,7 @@ before_script:
 - while [[ "$(kubectl get pods --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get pods --all-namespaces ; sleep 6; done
 
 - kubectl describe nodes
-- kubectl describe -n kube-system deployment virt-handler
+- kubectl describe -n kube-system daemonset virt-handler
 
 script:
 # -e is important to let make use the vars defined in "matrix:" above

@@ -59,6 +59,7 @@ before_script:
 - kubectl api-versions | grep kubevirt.io
 - while [[ "$(kubectl get pods --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get pods --all-namespaces ; sleep 6; done
 
+- kubectl get pods --all-namespaces
 - kubectl describe nodes
 - kubectl describe -n kube-system daemonset virt-handler
 - kubectl -n kube-system logs -l kubevirt.io=virt-handler

@@ -61,6 +61,7 @@ before_script:
 
 - kubectl describe nodes
 - kubectl describe -n kube-system daemonset virt-handler
+- kubectl -n kube-system logs -l kubevirt.io=virt-handler
 
 script:
 # -e is important to let make use the vars defined in "matrix:" above

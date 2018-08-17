@@ -6,9 +6,11 @@ dist: trusty
 env:
   global:
     - CHANGE_MINIKUBE_NONE_USER=true
-    - KUBEVIRT_VER=v0.8.0-alpha.0
-    - MINIKUBE_VER=v0.25.2
+    - MINIKUBE_VER=v0.28.2
     - K8S_VER=1.10.0
+  matrix:
+    - KUBEVIRT_VER=v0.8.0-alpha.0
+    - KUBEVIRT_VER=v0.7.0-alpha.2
 
 matrix:
   include:
@@ -46,7 +48,7 @@ before_script:
 - curl -Lo virtctl https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VER/virtctl-$KUBEVIRT_VER-linux-amd64 && chmod +x virtctl && sudo mv virtctl /usr/local/bin/
 
 # Start Kubernetes using minikube
-- sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER --bootstrapper=localkube --mount --mount-string $PWD:/minikube-host
+- sudo minikube start --vm-driver=none --kubernetes-version=v$K8S_VER --bootstrapper=localkube --mount --mount-string $PWD:/minikube-host --memory=4096
 - minikube update-context
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 

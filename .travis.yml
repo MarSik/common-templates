@@ -1,7 +1,7 @@
 language: go
 
 sudo: required
-dist: trusty
+#dist: trusty
 
 env:
   global:
@@ -54,13 +54,14 @@ before_script:
 - sudo mount --make-rshared /
 
 # Deploy KubeVirt
-- kubectl create configmap -n kube-system kubevirt-config --from-literal debug.useEmulation=true --from-literal debug.allowEmulation=true || true
+- kubectl create configmap -n kube-system kubevirt-config --from-literal debug.allowEmulation=true || true
 - kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VER/kubevirt.yaml
 - kubectl api-versions | grep kubevirt.io
 - while [[ "$(kubectl get pods --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get pods --all-namespaces ; sleep 6; done
 
 - kubectl describe nodes
 - kubectl describe -n kube-system daemonset virt-handler
+- kubectl logs -n kube-system daemonset virt-handler
 
 script:
 # -e is important to let make use the vars defined in "matrix:" above

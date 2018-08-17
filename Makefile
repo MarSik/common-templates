@@ -45,7 +45,7 @@ is-deployed:
 	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$* | \
 	  kubectl apply -f -
 	virtctl start $@
-	while ! kubectl get vmi $@ -o yaml | grep "phase: Running" ; do kubectl describe vmi $@ ; sleep 6; done
+	while ! kubectl get vmi $@ -o yaml | grep "phase: Running" ; do kubectl describe vm $@ ; kubectl describe vmi $@ ; kubectl describe pods ; sleep 6; done
 	# Wait for a pretty universal magic word
 	virtctl console --timeout=5 $@ | egrep -m 1 "Welcome|systemd"
 	oc process --local -f "templates/$*.yaml" NAME=$@ PVCNAME=$* | \

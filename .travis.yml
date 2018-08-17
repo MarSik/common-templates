@@ -12,18 +12,18 @@ env:
 
 matrix:
   include:
-  - name: Check syntax of all templates
-    env: TARGET=unit-tests
-  - name: Check retrieval of all disk images
-    env: TARGET="fedora28.raw ubuntu1604.raw opensuse15.raw rhel75.raw"
+#  - name: Check syntax of all templates
+#    env: TARGET=unit-tests
+#  - name: Check retrieval of all disk images
+#    env: TARGET="fedora28.raw ubuntu1604.raw opensuse15.raw rhel75.raw"
   - name: Functional test of the Fedora template
     env: TARGET=functional-tests TEST_FUNCTIONAL=fedora28
-  - name: Functional test of the Ubuntu template
-    env: TARGET=functional-tests TEST_FUNCTIONAL=ubuntu1604
-  - name: Functional test of the OpenSUSE template
-    env: TARGET=functional-tests TEST_FUNCTIONAL=opensuse15
-  - name: Functional test of the CentOS/RHEL template
-    env: TARGET=functional-tests TEST_FUNCTIONAL=rhel75
+#  - name: Functional test of the Ubuntu template
+#    env: TARGET=functional-tests TEST_FUNCTIONAL=ubuntu1604
+#  - name: Functional test of the OpenSUSE template
+#    env: TARGET=functional-tests TEST_FUNCTIONAL=opensuse15
+#  - name: Functional test of the CentOS/RHEL template
+#    env: TARGET=functional-tests TEST_FUNCTIONAL=rhel75
 
 #notifications:
 #  irc:

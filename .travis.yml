@@ -59,6 +59,8 @@ before_script:
 - kubectl api-versions | grep kubevirt.io
 - while [[ "$(kubectl get pods --all-namespaces --field-selector=status.phase!=Running | wc -l)" -gt 1 ]]; do kubectl get pods --all-namespaces ; sleep 6; done
 
+- kubectl describe nodes
+
 script:
 # -e is important to let make use the vars defined in "matrix:" above
 - make -e $TARGET

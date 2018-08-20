@@ -64,7 +64,7 @@ before_script:
 script:
 # -e is important to let make use the vars defined in "matrix:" above
 #- make -e $TARGET
-- kubectl apply -f https://github.com/kubevirt/demo/blob/master/manifests/vm.yaml
+- kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml
 - kubectl get vm testvm
 - kubectl patch virtualmachine testvm --type merge -p '{"spec":{"running":true}}'
 - timeout 10s sh -c "kubectl get -w vmis | grep -m1 testvm"

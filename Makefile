@@ -69,7 +69,7 @@ endif
 	ln $< pvs/$*/disk.img && \
 	bash create-minikube-pvc.sh "$*" "$${SIZEMB}M" "/minikube-host/pvs/$*/" | tee | kubectl apply -f -
 	find pvs
-	kubectl get -o pv $*
+	kubectl get -o yaml pv $*
 #else
 #%.pv: %.raw
 #	SIZEMB=$$(( $$(qemu-img info $< --output json | jq '.["virtual-size"]') / 1024 / 1024 + 128 )) \

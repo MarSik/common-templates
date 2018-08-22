@@ -54,27 +54,17 @@ is-deployed:
 pvs: $(TESTABLE_GUESTS:%=%.pv)
 raws: $(TESTABLE_GUESTS:%=%.raw)
 
-ifdef CI
 %.pvc: %.pv
 	kubectl get pvc $*
-else
-%.pvc:
-	kubectl get pvc $*
-endif
 
-#ifdef TRAVIS
 %.pv: %.raw
 	SIZEMB=$$(( $$(qemu-img info $< --output json | jq '.["virtual-size"]') / 1024 / 1024 + 128 )) && \
 	mkdir -p "pvs/$*" && \
 	ln $< pvs/$*/disk.img && \
+	sudo chown 107:107 pvs/$*/disk.img && \
 	bash create-minikube-pvc.sh "$*" "$${SIZEMB}M" "/minikube-host/pvs/$*/" | tee | kubectl apply -f -
 	find pvs
 	kubectl get -o yaml pv $*
-#else
-#%.pv: %.raw
-#	SIZEMB=$$(( $$(qemu-img info $< --output json | jq '.["virtual-size"]') / 1024 / 1024 + 128 )) \
-#	set -x ; kubectl plugin pvc create "$*" "$${SIZEMB}M" "$$PWD/$<" "disk.img"
-#endif
 
 fedora28.qcow2:
 	curl -L -o $@ https://download.fedoraproject.org/pub/fedora/linux/releases/28/Cloud/x86_64/images/Fedora-Cloud-Base-28-1.1.x86_64.qcow2

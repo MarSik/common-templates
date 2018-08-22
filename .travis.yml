@@ -5,7 +5,9 @@ env:
     - CHANGE_MINIKUBE_NONE_USER=true
     - KUBEVIRT_VER=v0.8.0-alpha.1
     - MINIKUBE_VER=v0.28.2
-    - K8S_VER=1.10.0
+  matrix:
+    - K8S_VER=1.10.7
+    - K8S_VER=1.11.2
 
 matrix:
   include:
@@ -70,4 +72,4 @@ script:
 - sleep 10
 - kubectl get -w vmis | grep -m1 testvm
 - sleep 30
-- kubectl get -w vmis -o yaml
+- kubectl get vmi testvm -o yaml

@@ -1,6 +1,7 @@
 sudo: required
-dist: xenial
-group: edge
+dist: trusty
+#dist: xenial
+#group: edge
 
 language: generic
 env:
@@ -40,6 +41,7 @@ addons:
     - jq
 
 before_script:
+- ls /dev/kvm -shal
 # Fetch binaries
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v$K8S_VER/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 - curl -Lo minikube https://storage.googleapis.com/minikube/releases/$MINIKUBE_VER/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/

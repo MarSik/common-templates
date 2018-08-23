@@ -1,12 +1,16 @@
 sudo: required
-dist: trusty
-#dist: xenial
-#group: edge
+dist: xenial
+group: edge
 
 language: generic
 env:
   global:
     - CHANGE_MINIKUBE_NONE_USER=true
+    - MINIKUBE_WANTUPDATENOTIFICATION=false
+    - MINIKUBE_WANTREPORTERRORPROMPT=false
+    - MINIKUBE_HOME=$HOME
+    - CHANGE_MINIKUBE_NONE_USER=true
+
     - KUBEVIRT_VER=v0.8.0-alpha.1
     - MINIKUBE_VER=v0.28.2
     - K8S_VER=1.10.7
@@ -34,17 +38,17 @@ matrix:
 #    on_success: change
 #    on_failure: always
 
-addons:
-  apt:
-    packages:
-    - qemu-utils
-    - jq
+#addons:
+#  apt:
+#    packages:
+#    - qemu-utils
+#    - jq
 
 services:
 - docker
 
 before_script:
-- cd do ; docker build -t minikube . ; docker run -it --rm --name minikube -d -v /lib/modules:/lib/modules:ro minikube ; docker exec -it minikube bash -x s
+#- cd do ; docker build -t minikube . ; docker run -it --rm --name minikube -d -v /lib/modules:/lib/modules:ro minikube ; docker exec -it minikube bash -x s
 # Fetch binaries
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v$K8S_VER/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 - curl -Lo minikube https://storage.googleapis.com/minikube/releases/$MINIKUBE_VER/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
@@ -72,7 +76,7 @@ before_script:
 
 script:
 # -e is important to let make use the vars defined in "matrix:" above
-- make -e $TARGET
+#- make -e $TARGET
 - kubectl apply -f https://raw.githubusercontent.com/kubevirt/demo/master/manifests/vm.yaml
 - kubectl get vm testvm
 - kubectl patch virtualmachine testvm --type merge -p '{"spec":{"running":true}}'

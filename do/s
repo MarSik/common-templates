@@ -13,7 +13,7 @@ touch $HOME/.kube/config
 export KUBECONFIG=$HOME/.kube/config
 
 minikube start --v=10 --logtostderr --vm-driver=none --kubernetes-version=v$K8S_VER --memory=4096 --mount --mount-string $PWD:/minikube-host
-minikube update-context
-JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
+#minikube update-context
+#JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
 

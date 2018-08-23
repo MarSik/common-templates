@@ -39,8 +39,10 @@ addons:
     packages:
     - qemu-utils
     - jq
+    - libvirt-clients
 
 before_script:
+- virt-host-validate
 - ls /dev/kvm -shal
 # Fetch binaries
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v$K8S_VER/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/

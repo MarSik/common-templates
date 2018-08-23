@@ -39,7 +39,7 @@ addons:
     packages:
     - qemu-utils
     - jq
-    - libvirt-clients
+    - libvirt-bin
 
 before_script:
 - virt-host-validate

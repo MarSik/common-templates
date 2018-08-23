@@ -44,8 +44,8 @@ matrix:
 #    - qemu-utils
 #    - jq
 
-services:
-- docker
+#services:
+#- docker
 
 before_script:
 #- cd do ; docker build -t minikube . ; docker run -it --rm --name minikube -d -v /lib/modules:/lib/modules:ro minikube ; docker exec -it minikube bash -x s

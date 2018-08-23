@@ -44,7 +44,7 @@ services:
 - docker
 
 before_script:
-- cd do ; docker build -t minikube . ; docker run -it --rm --name minikube -d -v /lib/modules:/lib/modules:ro minikube ; docker exec -it bash -x s
+- cd do ; docker build -t minikube . ; docker run -it --rm --name minikube -d -v /lib/modules:/lib/modules:ro minikube ; docker exec -it minikube bash -x s
 # Fetch binaries
 - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v$K8S_VER/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
 - curl -Lo minikube https://storage.googleapis.com/minikube/releases/$MINIKUBE_VER/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/

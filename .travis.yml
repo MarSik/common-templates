@@ -12,7 +12,8 @@ env:
     - CHANGE_MINIKUBE_NONE_USER=true
 
     - KUBEVIRT_VER=v0.8.0-alpha.1
-    - MINIKUBE_VER=v0.28.2
+# https://github.com/kubernetes/minikube/issues/3038#issuecomment-414611151
+    - MINIKUBE_VER=v0.28.0
     - K8S_VER=1.10.2
 #    - K8S_VER=1.11.2
 

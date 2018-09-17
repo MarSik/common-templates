@@ -20,24 +20,24 @@ metadata:
     template.openshift.io/bindable: "false"
 
     defaults.template.cnv.io/disk: rootdisk
-    template.cnv.io/editable:
-    - "/objects[0].spec.template.spec.domain.cpu.cores"
-    - "/objects[0].spec.template.spec.domain.resources.requests.memory"
-    - "/objects[0].spec.template.spec.domain.devices.disks"
-    - "/objects[0].spec.template.spec.volumes"
-    - "/objects[0].spec.template.spec.networks"
+    template.cnv.io/editable: |
+      /objects[0].spec.template.spec.domain.cpu.cores
+      /objects[0].spec.template.spec.domain.resources.requests.memory
+      /objects[0].spec.template.spec.domain.devices.disks
+      /objects[0].spec.template.spec.volumes
+      /objects[0].spec.template.spec.networks
 
   labels:
-    os.template.cnv.io/fedora29: true
-    os.template.cnv.io/fedora28: true
-    os.template.cnv.io/fedora27: true
-    os.template.cnv.io/fedora26: true
-    os.template.cnv.io/fedora25: true
-    os.template.cnv.io/fedora24: true
-    os.template.cnv.io/fedora23: true
-    workload.template.cnv.io/server: true
-    workload.template.cnv.io/desktop: true
-    flavor.template.cnv.io/small: true
+    os.template.cnv.io/fedora29: "true"
+    os.template.cnv.io/fedora28: "true"
+    os.template.cnv.io/fedora27: "true"
+    os.template.cnv.io/fedora26: "true"
+    os.template.cnv.io/fedora25: "true"
+    os.template.cnv.io/fedora24: "true"
+    os.template.cnv.io/fedora23: "true"
+    workload.template.cnv.io/server: "true"
+    workload.template.cnv.io/desktop: "true"
+    flavor.template.cnv.io/small: "true"
 
 objects:
 - apiVersion: kubevirt.io/v1
@@ -80,5 +80,5 @@ parameters:
   name: NAME
 - name: PVCNAME
   description: Name of the PVC with the disk image
-  required: true
+  required: "true"
 

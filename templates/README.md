@@ -52,6 +52,8 @@ metadata:
     # that will do the find and replace using a syntax documented
     # here: https://kubernetes.io/docs/reference/kubectl/jsonpath/
     # The jsonpath root is the objects: element of the template
+    # XXX There is currently an issue with annotations not supporting
+    #     list values
     template.cnv.io/replace:
     - path: "/VM/disks/*/type"
       value: virtio
@@ -59,17 +61,23 @@ metadata:
     # Another extension useful for CNV aware tooling that allows
     # expressing additional validation rules for this template
     # The jsonpath root is the objects: element of the template
+    # XXX There is currently an issue with annotations not supporting
+    #     list values
     template.cnv.io/validate:
     - path: "/VM/spec/domain/guest/memory"
       min: 3
       max: 4
 
     # Another extension for hinting at which elements should be
-    # considered editable
+    # considered editable. The content is a line separated
+    # list of jsonpath selectors.
     # The jsonpath root is the objects: element of the template
-    template.cnv.io/editable:
-      - "/VM/spec/domain/guest/memory"
-      - "/VM/spec/domain/guest/memory"
+    template.cnv.io/editable: |
+      /objects[0].spec.template.spec.domain.cpu.cores
+      /objects[0].spec.template.spec.domain.resources.requests.memory
+      /objects[0].spec.template.spec.domain.devices.disks
+      /objects[0].spec.template.spec.volumes
+      /objects[0].spec.template.spec.networks
 
   labels:
     # The UI can show all possible template.cnv.io/* values in a nice way
@@ -84,28 +92,26 @@ metadata:
     # flavors are tiny, medium, large, etc.
     # workloads are generic, high-performance, io-intensive,
     #               oracle-db, sap-hana...
-    os.template.cnv.io/windows2k12r2: true
-    os.template.cnv.io/windows8: true
-    os.template.cnv.io/windows7: true
-    workload.template.cnv.io/minimal: true
-    workload.template.cnv.io/io-intensive: true
+    os.template.cnv.io/windows2k12r2: "true"
+    os.template.cnv.io/windows8: "true"
+    os.template.cnv.io/windows7: "true"
+    workload.template.cnv.io/minimal: "true"
+    workload.template.cnv.io/io-intensive: "true"
     # flavor.template.cnv.io/* not specified means all
     # And example of not specifying any positive requirement
     # but listing the exclusions instead (matches all except
     # the listed false valued labels).
-    flavor.template.cnv.io/tiny: false
+    flavor.template.cnv.io/tiny: "false"
 
 # Parameters must come from a subset of well known names
 # so the UI can properly work with those.
 parameters:
-- description: VM name
-  from: '[A-Za-z0-9]{1,16}'
+- name: NAME
+  description: VM name
   generate: expression
-  name: NAME
-- description: Memory size
-  from: '[A-Z0-9]{8}'
-  generate: expression
-  name: MEMORY_SIZE
+  from: 'vm-[A-Za-z0-9]{8}'
+- name: MEMORY_SIZE
+  description: Memory size
   value: 1Gi
 
 objects:

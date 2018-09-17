@@ -19,22 +19,22 @@ metadata:
     template.openshift.io/bindable: "false"
 
     defaults.template.cnv.io/disk: rootdisk
-    template.cnv.io/editable:
-    - "/objects[0].spec.template.spec.domain.cpu.cores"
-    - "/objects[0].spec.template.spec.domain.resources.requests.memory"
-    - "/objects[0].spec.template.spec.domain.devices.disks"
-    - "/objects[0].spec.template.spec.volumes"
-    - "/objects[0].spec.template.spec.networks"
+    template.cnv.io/editable: |
+      /objects[0].spec.template.spec.domain.cpu.cores
+      /objects[0].spec.template.spec.domain.resources.requests.memory
+      /objects[0].spec.template.spec.domain.devices.disks
+      /objects[0].spec.template.spec.volumes
+      /objects[0].spec.template.spec.networks
 
   labels:
-    os.template.cnv.io/rhel7.0: true
-    os.template.cnv.io/rhel7.1: true
-    os.template.cnv.io/rhel7.2: true
-    os.template.cnv.io/rhel7.3: true
-    os.template.cnv.io/rhel7.4: true
-    os.template.cnv.io/rhel7.5: true
-    workload.template.cnv.io/high-performance: true
-    flavor.template.cnv.io/medium: true
+    os.template.cnv.io/rhel7.0: "true"
+    os.template.cnv.io/rhel7.1: "true"
+    os.template.cnv.io/rhel7.2: "true"
+    os.template.cnv.io/rhel7.3: "true"
+    os.template.cnv.io/rhel7.4: "true"
+    os.template.cnv.io/rhel7.5: "true"
+    workload.template.cnv.io/high-performance: "true"
+    flavor.template.cnv.io/medium: "true"
 
 objects:
 - apiVersion: kubevirt.io/v1
@@ -48,7 +48,7 @@ objects:
         domain:
           cpu:
             cores: 2
-            dedicatedCpuPlacement: true
+            dedicatedCpuPlacement: "true"
             model: host-model
           resources:
             requests:
@@ -80,5 +80,5 @@ parameters:
   name: NAME
 - name: PVCNAME
   description: Name of the PVC with the disk image
-  required: true
+  required: "true"
 

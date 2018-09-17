@@ -18,21 +18,21 @@ metadata:
 
     defaults.template.cnv.io/disk: rootdisk
     defaults.template.cnv.io/network: default
-    template.cnv.io/editable:
-    - "/objects[0].spec.template.spec.domain.cpu.cores"
-    - "/objects[0].spec.template.spec.domain.resources.requests.memory"
-    - "/objects[0].spec.template.spec.domain.devices.disks"
-    - "/objects[0].spec.template.spec.volumes"
-    - "/objects[0].spec.template.spec.networks"
+    template.cnv.io/editable: |
+      /objects[0].spec.template.spec.domain.cpu.cores
+      /objects[0].spec.template.spec.domain.resources.requests.memory
+      /objects[0].spec.template.spec.domain.devices.disks
+      /objects[0].spec.template.spec.volumes
+      /objects[0].spec.template.spec.networks
 
   labels:
-    os.template.cnv.io/win2k12r2: true
-    os.template.cnv.io/win2k8r2: true
-    os.template.cnv.io/win2k8: true
-    os.template.cnv.io/win10: true
-    workload.template.cnv.io/server: true
-    workload.template.cnv.io/desktop: true
-    flavor.template.cnv.io/medium: true
+    os.template.cnv.io/win2k12r2: "true"
+    os.template.cnv.io/win2k8r2: "true"
+    os.template.cnv.io/win2k8: "true"
+    os.template.cnv.io/win10: "true"
+    workload.template.cnv.io/server: "true"
+    workload.template.cnv.io/desktop: "true"
+    flavor.template.cnv.io/medium: "true"
 objects:
 - apiVersion: kubevirt.io/v1alpha2
   kind: VirtualMachine
@@ -88,10 +88,10 @@ objects:
           pod: {}
 
 parameters:
-- description: Name of the new VM
-  from: '[A-Za-z0-9]{1,16}'
+- name: NAME
+  description: VM name
   generate: expression
-  name: NAME
+  from: "win2k12-[a-z0-9]{6}"
 - name: PVCNAME
   description: Name of the PVC with the disk image
-  required: true
+  required: "true"

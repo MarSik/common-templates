@@ -37,7 +37,7 @@ metadata:
     flavor.template.cnv.io/medium: "true"
 
 objects:
-- apiVersion: kubevirt.io/v1
+- apiVersion: kubevirt.io/v1alpha2
   kind: VirtualMachine
   metadata:
     name: ${NAME}

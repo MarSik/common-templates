@@ -117,7 +117,7 @@ parameters:
 objects:
 # The full VM template with placeholders for either scalars like memory
 # or yaml structures like disks
-- apiVersion: v1
+- apiVersion: kubevirt.io/v1alpha2
   kind: VirtualMachine
   metadata:
     name: ${NAME}
@@ -170,7 +170,7 @@ The above template should result in the following VM object:
 
 ```YAML
 # vim: sts=2 sw=2 et
-apiVersion: v1
+apiVersion: kubevirt.io/v1alpha2
 kind: VirtualMachine
 metadata:
   name: windows-10-1

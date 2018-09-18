@@ -75,10 +75,10 @@ objects:
 
 parameters:
 - description: VM name
-  from: '[A-Za-z0-9]{1,16}'
+  from: '[a-z0-9]{16}'
   generate: expression
   name: NAME
 - name: PVCNAME
   description: Name of the PVC with the disk image
-  required: "true"
+  required: true
 

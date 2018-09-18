@@ -74,11 +74,11 @@ objects:
           name: cloudinitvolume
 
 parameters:
-- description: Name of the new VM
-  from: '[A-Za-z0-9]{1,16}'
+- description: VM name
+  from: '[a-z0-9]{16}'
   generate: expression
   name: NAME
 - name: PVCNAME
   description: Name of the PVC with the disk image
-  required: "true"
+  required: true
 

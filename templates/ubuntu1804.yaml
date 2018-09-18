@@ -33,15 +33,7 @@ metadata:
     workload.template.cnv.io/desktop: "true"
     flavor.template.cnv.io/small: "true"
 objects:
-- apiVersion: kubevirt.io/v1alpha2alpha2
-  kind: VirtualMachineInstancePreset
-  metadata:
-    name: ubuntu1804
-  spec:
-    selector:
-      matchLabels:
-        kubevirt.io/os: ubuntu1804
-- apiVersion: kubevirt.io/v1alpha2alpha2
+- apiVersion: kubevirt.io/v1alpha2
   kind: VirtualMachine
   metadata:
     name: ${NAME}
@@ -76,11 +68,10 @@ objects:
               chpasswd: { expire: False }
           name: cloudinitvolume
 parameters:
-- name: NAME
-  description: Name of the new VM
+- description: VM name
+  from: '[a-z0-9]{16}'
   generate: expression
-  from: "ubuntu1804-[a-z0-9]{6}"
-  required: "true"
+  name: NAME
 - name: PVCNAME
   description: Name of the PVC with the disk image
-  required: "true"
+  required: true

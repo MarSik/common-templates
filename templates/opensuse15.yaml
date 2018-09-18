@@ -68,11 +68,11 @@ objects:
           name: cloudinitvolume
 
 parameters:
-- name: NAME
-  description: VM name
+- description: VM name
+  from: '[a-z0-9]{16}'
   generate: expression
-  from: "opensuse15-[a-z0-9]{6}"
+  name: NAME
 - name: PVCNAME
   description: Name of the PVC with the disk image
-  required: "true"
+  required: true
 

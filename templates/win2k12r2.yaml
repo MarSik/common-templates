@@ -34,7 +34,7 @@ metadata:
     workload.template.cnv.io/desktop: "true"
     flavor.template.cnv.io/medium: "true"
 objects:
-- apiVersion: kubevirt.io/v1alpha2alpha2
+- apiVersion: kubevirt.io/v1alpha2
   kind: VirtualMachine
   metadata:
     labels:
@@ -88,10 +88,10 @@ objects:
           pod: {}
 
 parameters:
-- name: NAME
-  description: VM name
+- description: VM name
+  from: '[a-z0-9]{16}'
   generate: expression
-  from: "win2k12-[a-z0-9]{6}"
+  name: NAME
 - name: PVCNAME
   description: Name of the PVC with the disk image
-  required: "true"
+  required: true

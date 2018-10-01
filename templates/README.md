@@ -74,6 +74,33 @@ metadata:
       /objects[0].spec.template.spec.volumes
       /objects[0].spec.template.spec.networks
 
+
+    # The following set of annotations is supposed to express
+    # the validations and transformation rules of the template.
+
+    # Replacements useful for finishing the transformation
+    # This is an extension we could use for specifying common
+    # fields for all disks/nics. Requires extra implementation
+    # that will do the find and replace using a syntax documented
+    # here: https://kubernetes.io/docs/reference/kubectl/jsonpath/
+    # The jsonpath root is the objects: element of the template
+    # XXX There is currently an issue with annotations not supporting
+    #     list values
+    template.cnv.io/replace:
+    - path: "/VM/disks/*/type"
+      value: virtio
+
+    # Another extension useful for CNV aware tooling that allows
+    # expressing additional validation rules for this template
+    # The jsonpath root is the objects: element of the template
+    # XXX There is currently an issue with annotations not supporting
+    #     list values
+    template.cnv.io/validate:
+    - path: "/VM/spec/domain/guest/memory"
+      min: 3
+      max: 4
+
+
   labels:
     # The UI can show all possible template.cnv.io/* values in a nice way
     # and let the user filter down the available templates to the one
